@@ -4,11 +4,11 @@
 #Last update 2022-04-23
 #Copyright (C) 2021 Alessandro Albano, Davide De Carne and Simone Dal Maso
 
+import api
 import globalVars
 import globalPluginHandler
 import addonHandler
 from scriptHandler import script
-from baseObject import ScriptableObject
 from logHandler import log
 
 from .nao_document_cache import NaoDocumentCache
@@ -35,28 +35,13 @@ def BrowseAndRecognize():
 	if not globalVars.appArgs.secure:
 		wx.CallAfter(h)
 
-class RecognizableFileObject(ScriptableObject):
-	# Allow the bound gestures to be edited through the Input Gestures dialog (see L{gui.prePopup})
-	isPrevFocusOnNvdaPopup = True
-
-	@script(
-		# Translators: Message presented in input help mode.
-		description=_("Recognizes the content of the selected image or PDF file"),
-		gesture="kb:NVDA+shift+R",
-		category=ADDON_SUMMARY
+def _is_supported_context(obj):
+	return (
+		explorer.is_explorer(obj)
+		or explorer.is_totalcommander(obj)
+		or explorer.is_xplorer2(obj)
+		or explorer.is_outlook(obj)
 	)
-	def script_recognize_file(self, gesture):
-		if not globalVars.appArgs.secure:
-			try:
-				filename, temp_path = explorer.get_selected_file()
-			except:
-				log.debugWarning(f"Cannot detect current file name.", exc_info=True)
-				filename = None
-				temp_path = None
-			if filename:
-				OCRHelper(ocr_document_file_extension=OCR_DOCUMENT_FILE_EXTENSION, ocr_document_file_cache=NaoDocumentCache()).recognize_file(filename, temp_path=temp_path)
-			else:
-				BrowseAndRecognize()
 
 class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def __init__(self):
@@ -76,16 +61,31 @@ class GlobalPlugin(globalPluginHandler.GlobalPlugin):
 	def terminate(self):
 		ProgramTerminate()
 
-	def chooseNVDAObjectOverlayClasses(self, obj, clsList):
-		if obj:
-			if explorer.is_explorer(obj):
-				clsList.insert(0, RecognizableFileObject)
-			elif explorer.is_totalcommander(obj):
-				clsList.insert(0, RecognizableFileObject)
-			elif explorer.is_xplorer2(obj):
-				clsList.insert(0, RecognizableFileObject)
-			elif explorer.is_outlook(obj):
-				clsList.insert(0, RecognizableFileObject)
+	@script(
+		# Translators: Message presented in input help mode.
+		description=_("Recognizes the content of the selected image or PDF file"),
+		gesture="kb:NVDA+shift+R",
+		category=ADDON_SUMMARY
+	)
+	def script_recognize_file(self, gesture):
+		if globalVars.appArgs.secure:
+			return
+		obj = api.getForegroundObject()
+		if not _is_supported_context(obj):
+			return
+		try:
+			filename, temp_path = explorer.get_selected_file(obj)
+		except:
+			log.debugWarning("Cannot detect current file name.", exc_info=True)
+			filename = None
+			temp_path = None
+		if filename:
+			OCRHelper(
+				ocr_document_file_extension=OCR_DOCUMENT_FILE_EXTENSION,
+				ocr_document_file_cache=NaoDocumentCache(),
+			).recognize_file(filename, temp_path=temp_path)
+		else:
+			BrowseAndRecognize()
 
 	@script(
 		# Translators: Message presented in input help mode.

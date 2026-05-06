@@ -46,6 +46,11 @@ If you think our work is good and improve your life, a <a href="https://nvda-nao
 Do you want to report a bug, suggest new features, translate the addon in your language? We have the email for you! Just write to support@nvda-nao.org and we will be happy to help you.
 
 ## History
+### 2026.1
+* Compatibility with NVDA version 2026.1 restored.
+* Fixed a problem with screenshot OCR caused by NVDA's new Screen Curtain module layout.
+* Updated add-on version metadata and last tested NVDA version to 2026.1.
+
 ### 2025.1
 * NVDA version 2025.1 compatibility
 * Implement OCR recognition on the selected attachment of an opened Outlook message, from outlook 2016 and beyond

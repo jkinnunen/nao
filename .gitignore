@@ -12,3 +12,4 @@ addon/doc/en/
 *.code-workspace
 *.env
 addon/settings.json
+.venv/

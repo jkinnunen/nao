@@ -1,0 +1,5 @@
+# Build-time and development-time Python dependencies for this NVDA add-on.
+# Runtime NVDA modules are provided by NVDA itself and are not installed here.
+scons
+markdown
+comtypes

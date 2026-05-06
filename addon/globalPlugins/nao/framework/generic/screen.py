@@ -49,8 +49,12 @@ def take_snapshot_pixels(x=0, y=0, width=None, height=None, current_window=False
 	return [sb.captureImage(x, y, width, height), x, y, width, height]
 
 def have_curtain():
-	import vision
-	from visionEnhancementProviders.screenCurtain import ScreenCurtainProvider
-	screenCurtainId = ScreenCurtainProvider.getSettings().getId()
-	screenCurtainProviderInfo = vision.handler.getProviderInfo(screenCurtainId)
-	return bool(vision.handler.getProviderInstance(screenCurtainProviderInfo))
+	try:
+		from screenCurtain import screenCurtain
+	except ImportError:
+		import vision
+		from visionEnhancementProviders.screenCurtain import ScreenCurtainProvider
+		screenCurtainId = ScreenCurtainProvider.getSettings().getId()
+		screenCurtainProviderInfo = vision.handler.getProviderInfo(screenCurtainId)
+		return bool(vision.handler.getProviderInstance(screenCurtainProviderInfo))
+	return screenCurtain is not None and screenCurtain.enabled

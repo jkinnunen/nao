@@ -53,6 +53,11 @@ Arvostamme mitä tahansa tukea, jota voit meille antaa.
 Haluatko ilmoittaa bugista, ehdottaa uusia ominaisuuksia tai kääntää lisäosan omalle kielellesi? Meillä on sähköpostiosoite sinua varten. Kirjoita osoitteeseen support@nvda-nao.org, niin autamme mielellämme.
 
 ## Versiohistoria
+### 2026.1
+* NVDA 2026.1 -yhteensopivuus palautettu.
+* Korjattu NVDA:n uuden näyttöverhomoduulin rakenteen aiheuttama kuvakaappausten tekstintunnistuksen ongelma.
+* Lisäosan versiometatiedoksi ja viimeisimmäksi testatuksi NVDA-versioksi päivitetty 2026.1.
+
 ### 2025.1
 * Yhteensopiva NVDA 2025.1:n kanssa
 * Toteutettu tekstintunnistus valitulle avatun Outlook-viestin liitteelle Outlook 2016:ssa ja sitä uudemmissa
